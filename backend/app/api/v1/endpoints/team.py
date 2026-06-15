@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.schemas.core import SelectionRequest, TeamSelectionResponse
 from app.services.ai_selection import generate_tactical_xi
+from app.models.core import Player
 
 router = APIRouter()
 
@@ -29,3 +30,8 @@ async def recommend_team(request: SelectionRequest, db: Session = Depends(get_db
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI Processing Error: {str(e)}")
+    
+@router.get("/players")
+def get_all_players(db: Session = Depends(get_db)):
+    players = db.query(Player).all()
+    return [{"id": str(p.id), "name": p.name, "role": p.role} for p in players]

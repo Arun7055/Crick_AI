@@ -24,3 +24,6 @@ class DurabilityResponse(BaseModel):
     durability_score: float
     acwr_ratio: float
     injury_risk_status: str
+
+    class Config:
+        from_attributes = True

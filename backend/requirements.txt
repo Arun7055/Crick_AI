@@ -9,3 +9,4 @@ xgboost
 numpy
 pandas
 groq
+scikit-learn
