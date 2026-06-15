@@ -10,3 +10,5 @@ numpy
 pandas
 groq
 scikit-learn
+requests
+beautifulsoup4

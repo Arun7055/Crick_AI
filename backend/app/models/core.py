@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, String, Integer, Float, Boolean, Date, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, Boolean, Date, ForeignKey, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.core.database import Base
@@ -12,8 +12,9 @@ class Player(Base):
     role = Column(String(50), nullable=False)
     batting_style = Column(String(50))
     bowling_style = Column(String(50))
-    birth_date = Column(Date, nullable=False)
+    birth_date = Column(Date, nullable=True)
     current_team = Column(String(100))
+    cricbuzz_profile = Column(Text, nullable=True)
 
     stats = relationship("PlayerMatchStat", back_populates="player", cascade="all, delete-orphan")
 
