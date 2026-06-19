@@ -1,22 +1,30 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.auction import AuctionStrategyRequest, AuctionStrategyResponse
-from app.services.ai_auction import generate_auction_strategy
+import os
+from app.schemas.core import TeamNeedsRequest, AuctionResponse
+from app.ml.auction import AuctionStrategyEngine
 
 router = APIRouter()
 
-@router.post("/strategy", response_model=AuctionStrategyResponse)
-async def get_auction_strategy(request: AuctionStrategyRequest):
-    try:
-        strategy_result = await generate_auction_strategy(
-            remaining_purse=request.remaining_purse_lakhs,
-            gaps=request.squad_gaps,
-            pool=[p.model_dump() for p in request.available_pool]
-        )
+# Initialize the engine once when the server starts
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+CSV_PATH = os.path.join(BASE_DIR, "cleaned_auction_profiles.csv")
+
+try:
+    engine = AuctionStrategyEngine(CSV_PATH)
+except Exception as e:
+    print(f"⚠️ Warning: Could not load ML engine. {str(e)}")
+    engine = None
+
+@router.post("/target-players", response_model=AuctionResponse)
+def get_auction_targets(request: TeamNeedsRequest):
+    if not engine:
+        raise HTTPException(status_code=500, detail="ML Engine not initialized.")
         
-        return AuctionStrategyResponse(
-            primary_targets=strategy_result.get("primary_targets", []),
-            budget_allocation_advice=strategy_result.get("budget_allocation_advice", ""),
-            risk_assessment=strategy_result.get("risk_assessment", "")
-        )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Auction Strategy Generation Failed: {str(e)}")
+    targets = engine.calculate_targets(
+        needs=request,
+        purse=request.purse_remaining,
+        slots=request.slots_left,
+        top_n=15
+    )
+    
+    return {"recommendations": targets}

@@ -48,3 +48,28 @@ class DurabilityResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ==========================================
+# 3. AUCTION MODULE SCHEMAS
+# ==========================================
+
+class TeamNeedsRequest(BaseModel):
+    purse_remaining: float = Field(..., description="Total money left in Crores/Millions")
+    slots_left: int = Field(..., description="Number of roster spots left to fill")
+    
+    # Team Need Vectors (Scale of 0.0 to 1.0 - Front-end sliders)
+    need_power_hitter: float = Field(..., description="Desire for high strike rate and boundaries")
+    need_anchor_batter: float = Field(..., description="Desire for high batting average and stability")
+    need_wicket_taker: float = Field(..., description="Desire for low bowling strike rate")
+    need_economy_bowler: float = Field(..., description="Desire for low runs conceded")
+
+class AuctionRecommendation(BaseModel):
+    player_name: str
+    role: str
+    impact_score: float = Field(..., description="Raw statistical power (0-100)")
+    compatibility_score: float = Field(..., description="How well they fit the Team Needs (0-100%)")
+    max_bid_limit: float = Field(..., description="The mathematical ceiling to bid up to")
+    
+class AuctionResponse(BaseModel):
+    recommendations: List[AuctionRecommendation]
