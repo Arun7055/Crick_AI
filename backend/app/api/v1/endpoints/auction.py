@@ -1,14 +1,15 @@
 from fastapi import APIRouter, HTTPException
 import os
+from pathlib import Path
 from app.schemas.core import TeamNeedsRequest, AuctionResponse
 from app.ml.auction import AuctionStrategyEngine
 
 router = APIRouter()
 
 # Initialize the engine once when the server starts
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-CSV_PATH = os.path.join(BASE_DIR, "cleaned_auction_profiles.csv")
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
+CSV_PATH = BASE_DIR / "cleaned_auction_profiles.csv"
+print(f"👀 LOOKING FOR CSV AT: {CSV_PATH}")
 try:
     engine = AuctionStrategyEngine(CSV_PATH)
 except Exception as e:
