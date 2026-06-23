@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Target, MapPin, Trophy, Swords, Users, ShieldAlert } from "lucide-react";
+import PlayerCardModal from "@/components/PlayerCardModal";
 
 interface Player {
   id: string;
@@ -23,6 +24,7 @@ export default function SelectionPage() {
   const [selectionData, setSelectionData] = useState<any>(null);
   const [selectionLoading, setSelectionLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [inspectedPlayer, setInspectedPlayer] = useState<string | null>(null);
 
   // Fetch lightweight player roster on load from your existing backend route
   useEffect(() => {
@@ -215,7 +217,7 @@ export default function SelectionPage() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {selectionData.playing_xi?.map((player: any, idx: number) => (
-                  <div key={idx} className="bg-slate-950 border border-slate-800 p-3 rounded-lg flex items-start gap-3 hover:border-slate-700 transition-colors">
+                  <div key={idx} className="bg-slate-950 border border-slate-800 p-3 rounded-lg flex items-start gap-3 hover:border-slate-700 transition-colors" onClick={() => setInspectedPlayer(player.name)}>
                     <div className="bg-slate-800 text-slate-400 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                       {idx + 1}
                     </div>
@@ -231,6 +233,12 @@ export default function SelectionPage() {
           </>
         )}
       </div>
+      {/* Pop-up Dossier Modal */}
+      <PlayerCardModal 
+        isOpen={!!inspectedPlayer} 
+        onClose={() => setInspectedPlayer(null)} 
+        playerName={inspectedPlayer} 
+      />
     </div>
   );
 }

@@ -9,7 +9,6 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Match Selection", path: "/selection", icon: <Users className="w-4 h-4" /> },
-    { name: "Player Durability", path: "/durability", icon: <HeartPulse className="w-4 h-4" /> },
     { name: "Auction Strategy", path: "/auction", icon: <Gavel className="w-4 h-4" /> },
   ];
 

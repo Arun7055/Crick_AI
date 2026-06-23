@@ -15,6 +15,7 @@ class Player(Base):
     birth_date = Column(Date, nullable=True)
     current_team = Column(String(100))
     cricbuzz_profile = Column(Text, nullable=True)
+    injury_profile = Column(Text, nullable=True)
 
     stats = relationship("PlayerMatchStat", back_populates="player", cascade="all, delete-orphan")
 

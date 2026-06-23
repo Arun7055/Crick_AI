@@ -25,16 +25,6 @@ export default function LandingPage() {
           <span className="text-blue-500 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">Launch Tool <ArrowRight className="w-4 h-4"/></span>
         </Link>
 
-        <Link href="/durability" className="group bg-slate-900 border border-slate-800 hover:border-emerald-500 rounded-xl p-6 transition-all text-left relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <HeartPulse className="w-24 h-24" />
-          </div>
-          <HeartPulse className="w-8 h-8 text-emerald-400 mb-4" />
-          <h3 className="text-xl font-bold text-white mb-2">Durability Tracker</h3>
-          <p className="text-sm text-slate-400 mb-6">Monitor player workloads via XGBoost injury prediction models.</p>
-          <span className="text-emerald-500 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">Launch Tool <ArrowRight className="w-4 h-4"/></span>
-        </Link>
-
         <Link href="/auction" className="group bg-slate-900 border border-slate-800 hover:border-purple-500 rounded-xl p-6 transition-all text-left relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <Gavel className="w-24 h-24" />

@@ -24,34 +24,23 @@ class MatchupSelectionRequest(BaseModel):
                 raise ValueError(f"Player clash detected! These players cannot be on both teams: {', '.join(overlap)}")
         return squad
 
-class SelectedPlayer(BaseModel):
+class SquadSlot(BaseModel):
+    batting_order: int
+    position_name: str
+    required_role: str
+    actual_db_role: str      # <--- Updated from 'role'
     name: str
-    role: str
-    tactical_reason: str = Field(..., description="Why Groq picked this player for this specific matchup")
+    tactical_reason: str     # <--- Updated to match the LLM's key
 
-class MatchupSelectionResponse(BaseModel):
+class PlayingXIResponse(BaseModel):
     venue: str
     format: str
-    playing_xi: List[SelectedPlayer]
-    match_strategy_summary: str = Field(..., description="Overall strategy against the opposition at this venue")
+    match_strategy_summary: str
+    playing_xi: List[SquadSlot]
 
 
 # ==========================================
-# 2. INJURY & DURABILITY MODULE SCHEMAS
-# ==========================================
-
-class DurabilityResponse(BaseModel):
-    player_id: str
-    durability_score: float
-    acwr_ratio: float
-    injury_risk_status: str
-
-    class Config:
-        from_attributes = True
-
-
-# ==========================================
-# 3. AUCTION MODULE SCHEMAS
+# 2. AUCTION MODULE SCHEMAS
 # ==========================================
 
 class TeamNeedsRequest(BaseModel):

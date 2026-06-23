@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Gavel, IndianRupee, Users, Target, Activity, Shield, Zap } from "lucide-react";
+import PlayerCardModal from "@/components/PlayerCardModal";
 
 interface AuctionRecommendation {
   player_name: string;
@@ -26,6 +27,7 @@ export default function AuctionPage() {
   const [recommendations, setRecommendations] = useState<AuctionRecommendation[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [inspectedPlayer, setInspectedPlayer] = useState<string | null>(null);
 
   const fetchTargets = async () => {
     setLoading(true);
@@ -156,7 +158,7 @@ export default function AuctionPage() {
         {recommendations.length > 0 && !loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {recommendations.map((player, idx) => (
-              <div key={idx} className="bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-yellow-500/50 transition-all shadow-lg relative overflow-hidden">
+              <div key={idx} className="bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-yellow-500/50 transition-all shadow-lg relative overflow-hidden" onClick={() => setInspectedPlayer(player.player_name)}>
                 
                 {/* Ranking Badge */}
                 <div className="absolute top-0 right-0 bg-slate-800 text-xs font-bold px-3 py-1 rounded-bl-lg text-slate-400">
@@ -202,6 +204,12 @@ export default function AuctionPage() {
           </div>
         )}
       </div>
+      {/* Pop-up Dossier Modal */}
+      <PlayerCardModal 
+        isOpen={!!inspectedPlayer} 
+        onClose={() => setInspectedPlayer(null)} 
+        playerName={inspectedPlayer} 
+      />
     </div>
   );
 }
